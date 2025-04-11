@@ -108,7 +108,7 @@ services:
       - rabbitmq
     restart: always
     healthcheck:
-      test: ["CMD", "wget", "-qO-", "${OPENCTI_BASE_URL}/health?health_access_key=${OPENCTI_HEALTHCHECK_ACCESS_KEY}"]
+      test: ["CMD", "wget", "-qO-", "http://localhost:8080/health?health_access_key=${OPENCTI_HEALTHCHECK_ACCESS_KEY}"]
       interval: 10s
       timeout: 5s
       retries: 20
