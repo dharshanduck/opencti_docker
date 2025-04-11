@@ -102,14 +102,10 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      redis:
-        condition: service_healthy
-      elasticsearch:
-        condition: service_healthy
-      minio:
-        condition: service_healthy
-      rabbitmq:
-        condition: service_healthy
+     - redis
+     - elasticsearch
+     - minio
+     - rabbitmq
     restart: always
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://opencti:8080/health?health_access_key=${OPENCTI_HEALTHCHECK_ACCESS_KEY}"]
