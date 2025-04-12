@@ -12,11 +12,13 @@ services:
       retries: 3
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.17.4
+    ports:
+    - "9200:9200"
     volumes:
       - esdata:/usr/share/elasticsearch/data
     environment:
       # config listen on all iface
-      - network.host-0.0.0.0
+      - network.host=0.0.0.0
       # Comment-out the line below for a cluster of multiple nodes
       - discovery.type=single-node
       # Uncomment the line below below for a cluster of multiple nodes
@@ -36,7 +38,7 @@ services:
         hard: 65536
     healthcheck:
       test: curl -s http://localhost:9200 >/dev/null || exit 1
-      interval: 30s
+      interval: 60s
       timeout: 10s
       retries: 50
   minio:
@@ -84,7 +86,7 @@ services:
       - APP__APP_LOGS__LOGS_LEVEL=error
       - REDIS__HOSTNAME=redis
       - REDIS__PORT=6379
-      - ELASTICSEARCH__URL=http://localhost:9200
+      - ELASTICSEARCH__URL=http://192.168.100.30:9200
      # - ELASTICSEARCH__NUMBER_OF_REPLICAS=0
       - MINIO__ENDPOINT=minio
       - MINIO__PORT=9000
