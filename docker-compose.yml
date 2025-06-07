@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   redis:
-    image: redis:7.4.2
+    image: redis:7.4.3
     restart: always
     volumes:
       - redisdata:/data
@@ -11,7 +11,7 @@ services:
       timeout: 5s
       retries: 3
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.17.4
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.18.0
     ports:
     - "9200:9200"
     volumes:
@@ -58,7 +58,7 @@ services:
       timeout: 5s
       retries: 3
   rabbitmq:
-    image: rabbitmq:4.0-management
+    image: rabbitmq:4.1-management
     environment:
       - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
       - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
@@ -75,7 +75,7 @@ services:
       timeout: 30s
       retries: 3
   opencti:
-    image: opencti/platform:6.6.3
+    image: opencti/platform:6.6.14
     environment:
       - NODE_OPTIONS=--max-old-space-size=8096
       - APP__PORT=8080
@@ -86,7 +86,7 @@ services:
       - APP__APP_LOGS__LOGS_LEVEL=error
       - REDIS__HOSTNAME=redis
       - REDIS__PORT=6379
-      - ELASTICSEARCH__URL=http://192.168.100.30:9200
+      - ELASTICSEARCH__URL=http://192.168.0.122:9200
      # - ELASTICSEARCH__NUMBER_OF_REPLICAS=0
       - MINIO__ENDPOINT=minio
       - MINIO__PORT=9000
@@ -117,7 +117,7 @@ services:
       timeout: 5s
       retries: 20
   worker:
-    image: opencti/worker:6.6.3
+    image: opencti/worker:6.6.14
     environment:
       - OPENCTI_URL=http://opencti:8080
       - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
@@ -129,7 +129,7 @@ services:
       replicas: 3
     restart: always
   connector-export-file-stix:
-    image: opencti/connector-export-file-stix:6.6.3
+    image: opencti/connector-export-file-stix:6.6.14
     environment:
       - OPENCTI_URL=http://opencti:8080
       - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
@@ -142,7 +142,7 @@ services:
     depends_on:
       - opencti
   connector-export-file-csv:
-    image: opencti/connector-export-file-csv:6.6.3
+    image: opencti/connector-export-file-csv:6.6.14
     environment:
       - OPENCTI_URL=http://opencti:8080
       - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
@@ -155,7 +155,7 @@ services:
     depends_on:
       - opencti
   connector-export-file-txt:
-    image: opencti/connector-export-file-txt:6.6.3
+    image: opencti/connector-export-file-txt:6.6.14
     environment:
       - OPENCTI_URL=http://opencti:8080
       - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
@@ -168,7 +168,7 @@ services:
     depends_on:
       - opencti
   connector-import-file-stix:
-    image: opencti/connector-import-file-stix:6.6.3
+    image: opencti/connector-import-file-stix:6.6.14
     environment:
       - OPENCTI_URL=http://opencti:8080
       - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
@@ -183,7 +183,7 @@ services:
     depends_on:
       - opencti
   connector-import-document:
-    image: opencti/connector-import-document:6.6.3
+    image: opencti/connector-import-document:6.6.14
     environment:
       - OPENCTI_URL=http://opencti:8080
       - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
@@ -201,7 +201,7 @@ services:
     depends_on:
       - opencti
   connector-analysis:
-    image: opencti/connector-import-document:6.6.3
+    image: opencti/connector-import-document:6.6.14
     environment:
       - OPENCTI_URL=http://opencti:8080
       - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
@@ -218,7 +218,7 @@ services:
     depends_on:
       - opencti
   connector-cisa-known-exploited-vulnerabilities:
-    image: opencti/connector-cisa-known-exploited-vulnerabilities:6.6.4
+    image: opencti/connector-cisa-known-exploited-vulnerabilities:6.6.14
     environment:
       - OPENCTI_URL=http://opencti:8080
       - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
@@ -226,7 +226,7 @@ services:
       - CONNECTOR_NAME=CISA Known Exploited Vulnerabilities
       - CONNECTOR_SCOPE=cisa
       - CONNECTOR_LOG_LEVEL=error
-      - CONNECTOR_DURATION_PERIOD=P2D
+      - CONNECTOR_DURATION_PERIOD=P1D
       - CISA_CATALOG_URL=https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json
       - CISA_CREATE_INFRASTRUCTURES=true
       - CISA_TLP=TLP:CLEAR
@@ -234,7 +234,7 @@ services:
     depends_on:
       - opencti
   connector-abuse-ssl:
-    image: opencti/connector-abuse-ssl:6.6.4
+    image: opencti/connector-abuse-ssl:6.6.14
     environment:
       - OPENCTI_URL=http://opencti:8080
       - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
@@ -248,7 +248,7 @@ services:
     depends_on:
       - opencti
   connector-mitre-atlas:
-    image: opencti/connector-mitre-atlas:6.6.4
+    image: opencti/connector-mitre-atlas:6.6.14
     environment:
       - OPENCTI_URL=http://opencti:8080
       - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
@@ -263,7 +263,7 @@ services:
     depends_on:
       - opencti
   connector-mitre:
-    image: opencti/connector-mitre:6.6.4
+    image: opencti/connector-mitre:6.6.14
     environment:
       - OPENCTI_URL=http://opencti:8080
       - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
@@ -277,29 +277,9 @@ services:
     restart: always
     depends_on:
     - opencti
-  connector-cve:
-    image: opencti/connector-cve:6.6.4
-    environment:
-      - OPENCTI_URL=http://opencti:8080
-      - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
-      - CONNECTOR_ID=${CONNECTOR_CVE_ID}
-      - CONNECTOR_NAME=Common Vulnerabilities and Exposures
-      - CONNECTOR_SCOPE=identity,vulnerability
-      - CONNECTOR_RUN_AND_TERMINATE=false
-      - CONNECTOR_LOG_LEVEL=error
-      - CVE_BASE_URL=https://services.nvd.nist.gov/rest/json/source/2.0
-      - CVE_API_KEY=${CONNECTOR_CVE_NVD_API_KEY} # Required
-      - CVE_INTERVAL=2 # Required, in hours advice min 2
-      - CVE_MAX_DATE_RANGE=120 # In days, max 120
-      - CVE_MAINTAIN_DATA=true # Required, retrieve only updated data
-      - CVE_PULL_HISTORY=true # If true, CVE_HISTORY_START_YEAR is required
-      - CVE_HISTORY_START_YEAR=2019 # Required if pull_history is True, min 2019 (see documentation CVE and CVSS base score V3.1)
-    restart: always
-    depends_on:
-      - opencti
 
   connector-opencti:
-    image: opencti/connector-opencti:6.6.4
+    image: opencti/connector-opencti:6.6.14
     environment:
       - OPENCTI_URL=http://opencti:8080
       - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
@@ -314,6 +294,225 @@ services:
       - CONFIG_COMPANIES_FILE_URL=https://raw.githubusercontent.com/OpenCTI-Platform/datasets/master/data/companies.json
       - CONFIG_REMOVE_CREATOR=true
       - CONFIG_INTERVAL=7 # In days
+    restart: always
+    depends_on:
+    - opencti
+  connector-malwarebazaar-recent-additions:
+    image: opencti/connector-malwarebazaar-recent-additions:6.6.14
+    environment:
+      - OPENCTI_URL=http://opencti:8080
+      - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
+      - CONNECTOR_ID=${CONNECTOR_MALWAREBAZAAR_RECENT_ADDITIONS_ID}
+      - CONNECTOR_NAME=MalwareBazaar Recent Additions
+      - CONNECTOR_LOG_LEVEL=error
+      - MALWAREBAZAAR_RECENT_ADDITIONS_API_URL=https://mb-api.abuse.ch/api/v1/
+      - MALWAREBAZAAR_RECENT_ADDITIONS_COOLDOWN_SECONDS=300 # Time to wait in seconds between subsequent requests
+      - MALWAREBAZAAR_RECENT_ADDITIONS_INCLUDE_TAGS=exe,dll,docm,docx,doc,xls,xlsx,xlsm,js # (Optional) Only download files if any tag matches. (Comma separated)
+      - MALWAREBAZAAR_RECENT_ADDITIONS_INCLUDE_REPORTERS= # (Optional) Only download files uploaded by these reporters. (Comma separated)
+      - MALWAREBAZAAR_RECENT_ADDITIONS_LABELS=malware-bazaar # (Optional) Labels to apply to uploaded Artifacts. (Comma separated)
+      - MALWAREBAZAAR_RECENT_ADDITIONS_LABELS_COLOR=#54483b # Color to use for labels
+    restart: always
+    depends_on:
+    - opencti
+  connector-threatfox:
+    image: opencti/connector-threatfox:6.6.14
+    environment:
+      - OPENCTI_URL=http://opencti:8080
+      - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
+      - CONNECTOR_ID=${CONNECTOR_THREATFOX_ID}
+      - CONNECTOR_NAME=Abuse.ch | ThreatFox
+      - CONNECTOR_SCOPE=ThreatFox
+      - CONNECTOR_LOG_LEVEL=error
+      - THREATFOX_CSV_URL=https://threatfox.abuse.ch/export/csv/recent/
+      - THREATFOX_IMPORT_OFFLINE=true
+      - THREATFOX_CREATE_INDICATORS=true
+      - THREATFOX_DEFAULT_X_OPENCTI_SCORE=50
+      - THREATFOX_X_OPENCTI_SCORE_IP=60
+      - THREATFOX_X_OPENCTI_SCORE_DOMAIN=70
+      - THREATFOX_X_OPENCTI_SCORE_URL=75
+      - THREATFOX_X_OPENCTI_SCORE_HASH=80
+      - THREATFOX_INTERVAL=3 # In days, must be strictly greater than 1
+      - THREATFOX_IOC_TO_IMPORT=all_types # List of IOC types to import
+    restart: always
+    depends_on:
+    - opencti
+
+  connector-group-ib:
+    image: opencti/connector-group-ib:6.6.14
+    environment:
+      # === OpenCTI Server ===
+      - OPENCTI_URL=http://opencti:8080
+      # Use one as provided by the OpenCTI platform
+      - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
+
+      # === OpenCTI Connector ===
+      # Docker container name
+      - CONNECTOR_DOCKER_CONTAINER_NAME=gib_connector
+      # Generate one with uuidgen (https://www.uuidgenerator.net/version4)
+      - CONNECTOR_ID=${CONNECTOR_GIB_ID}
+      - CONNECTOR_TYPE=EXTERNAL_IMPORT
+      - CONNECTOR_NAME=Group-IB Connector
+      - CONNECTOR_SCOPE=stix2,ipv4-addr,ipv6-addr,vulnerability,domain,url,StixFile
+      # One of the following: debug, info, warning, error
+      - CONNECTOR_LOG_LEVEL="debug"
+      # Specifies the time interval in ISO 8601 format (Duration):
+      # Format: P[n]Y[n]M[n]DT[n]H[n]M[n]S
+      # - P: indicates the beginning of the period (Period).
+      # - T: separates date and time, used before time components.
+      # - n: a number representing a quantity (e.g. 3 for 3 minutes).
+      # 
+      # Examples:
+      # - PT3M: an interval of 3 minutes.
+      # - PT5S: an interval of 5 seconds.
+      # - P1DT2H: an interval of 1 day and 2 hours.
+      - CONNECTOR_DURATION_PERIOD=PT30M
+      - CONNECTOR_UPDATE_EXISTING_DATA=true
+
+      # === RabbitMQ Server used for integration manual run ===
+      - CONNECTOR_MQ_HOST=localhost
+      - CONNECTOR_MQ_PORT=5672
+      - CONNECTOR_MQ_VHOST=/
+      - CONNECTOR_MQ_USE_SSL=false
+      - CONNECTOR_MQ_USER=guest
+      - CONNECTOR_MQ_PASS=guest
+
+      # === Threat Intelligence API Server ===
+      # Connector specific parameters. All params are mandatory.
+      - TI_API__URL=https://tap.group-ib.com/api/v2/
+      - TI_API__USERNAME=${CONNECTOR_GIB_ID_API_KEY}
+      - TI_API__TOKEN=${CONNECTOR_GIB_ID_API_USERNAME}
+
+      # === Threat Intelligence API Proxy ===
+      # Proxy specifc parameters. You can leave them blank.
+      - TI_API__PROXY__IP=
+      - TI_API__PROXY__PORT=
+      - TI_API__PROXY__PROTOCOL=
+      - TI_API__PROXY__USERNAME=
+      - TI_API__PROXY__PASSWORD=
+
+      # Threat Intelligence Collections settings
+      - TI_API__EXTRA_SETTINGS__IGNORE_NON_INDICATOR_THREAT_REPORTS=false
+      - TI_API__EXTRA_SETTINGS__IGNORE_NON_INDICATOR_THREATS=false
+      - TI_API__EXTRA_SETTINGS__IGNORE_NON_MALWARE_DDOS=true
+      - TI_API__EXTRA_SETTINGS__INTRUSION_SET_INSTEAD_OF_THREAT_ACTOR=false
+      - TI_API__EXTRA_SETTINGS__SCHEDULE_TIME=00:00
+      - TI_API__EXTRA_SETTINGS__TIME_OUTPUT_FORMAT='%Y-%m-%d %H:%M:%S'
+
+      # Collections
+      - TI_API__COLLECTIONS__APT_THREAT__DEFAULT_DATE=2025-05-03
+      - TI_API__COLLECTIONS__APT_THREAT__ENABLE=true
+      - TI_API__COLLECTIONS__APT_THREAT__LOCAL_CUSTOM_TAG=null
+      - TI_API__COLLECTIONS__APT_THREAT__TTL=90
+
+      - TI_API__COLLECTIONS__APT_THREAT_ACTOR__DEFAULT_DATE=2025-05-03
+      - TI_API__COLLECTIONS__APT_THREAT_ACTOR__ENABLE=true
+      - TI_API__COLLECTIONS__APT_THREAT_ACTOR__LOCAL_CUSTOM_TAG=null
+      - TI_API__COLLECTIONS__APT_THREAT_ACTOR__TTL=90
+
+      - TI_API__COLLECTIONS__ATTACKS_DDOS__DEFAULT_DATE=2025-05-03
+      - TI_API__COLLECTIONS__ATTACKS_DDOS__ENABLE=true
+      - TI_API__COLLECTIONS__ATTACKS_DDOS__LOCAL_CUSTOM_TAG=null
+      - TI_API__COLLECTIONS__ATTACKS_DDOS__TTL=30
+
+      - TI_API__COLLECTIONS__ATTACKS_DEFACE__DEFAULT_DATE=2025-05-03
+      - TI_API__COLLECTIONS__ATTACKS_DEFACE__ENABLE=true
+      - TI_API__COLLECTIONS__ATTACKS_DEFACE__LOCAL_CUSTOM_TAG=null
+      - TI_API__COLLECTIONS__ATTACKS_DEFACE__TTL=30
+
+      - TI_API__COLLECTIONS__ATTACKS_PHISHING_GROUP__DEFAULT_DATE=2025-05-03
+      - TI_API__COLLECTIONS__ATTACKS_PHISHING_GROUP__ENABLE=false
+      - TI_API__COLLECTIONS__ATTACKS_PHISHING_GROUP__LOCAL_CUSTOM_TAG=null
+      - TI_API__COLLECTIONS__ATTACKS_PHISHING_GROUP__TTL=30
+
+      - TI_API__COLLECTIONS__ATTACKS_PHISHING_KIT__DEFAULT_DATE=2025-05-03
+      - TI_API__COLLECTIONS__ATTACKS_PHISHING_KIT__ENABLE=true
+      - TI_API__COLLECTIONS__ATTACKS_PHISHING_KIT__LOCAL_CUSTOM_TAG=null
+      - TI_API__COLLECTIONS__ATTACKS_PHISHING_KIT__TTL=30
+
+      - TI_API__COLLECTIONS__HI_OPEN_THREATS__DEFAULT_DATE="Warning! Collection is not implemented in the current version"
+      - TI_API__COLLECTIONS__HI_OPEN_THREATS__ENABLE=true
+      - TI_API__COLLECTIONS__HI_OPEN_THREATS__LOCAL_CUSTOM_TAG=null
+      - TI_API__COLLECTIONS__HI_OPEN_THREATS__TTL=
+
+      - TI_API__COLLECTIONS__HI_THREAT__DEFAULT_DATE=2025-05-03
+      - TI_API__COLLECTIONS__HI_THREAT__ENABLE=true
+      - TI_API__COLLECTIONS__HI_THREAT__LOCAL_CUSTOM_TAG=null
+      - TI_API__COLLECTIONS__HI_THREAT__TTL=90
+
+      - TI_API__COLLECTIONS__HI_THREAT_ACTOR__DEFAULT_DATE=2025-05-03
+      - TI_API__COLLECTIONS__HI_THREAT_ACTOR__ENABLE=true
+      - TI_API__COLLECTIONS__HI_THREAT_ACTOR__LOCAL_CUSTOM_TAG=null
+      - TI_API__COLLECTIONS__HI_THREAT_ACTOR__TTL=90
+
+      - TI_API__COLLECTIONS__IOC_COMMON__DEFAULT_DATE="Warning! Collection is not implemented in the current version"
+      - TI_API__COLLECTIONS__IOC_COMMON__ENABLE=false
+      - TI_API__COLLECTIONS__IOC_COMMON__LOCAL_CUSTOM_TAG=null
+      - TI_API__COLLECTIONS__IOC_COMMON__TTL=90
+
+      - TI_API__COLLECTIONS__MALWARE_CNC__DEFAULT_DATE="Warning! Collection is not implemented in the current version"
+      - TI_API__COLLECTIONS__MALWARE_CNC__ENABLE=false
+      - TI_API__COLLECTIONS__MALWARE_CNC__LOCAL_CUSTOM_TAG=null
+      - TI_API__COLLECTIONS__MALWARE_CNC__TTL=90
+
+      - TI_API__COLLECTIONS__MALWARE_CONFIG__DEFAULT_DATE=Warning! Collection is not implemented in the current version
+      - TI_API__COLLECTIONS__MALWARE_CONFIG__ENABLE=false
+      - TI_API__COLLECTIONS__MALWARE_CONFIG__LOCAL_CUSTOM_TAG=null
+      - TI_API__COLLECTIONS__MALWARE_CONFIG__TTL=30
+
+      - TI_API__COLLECTIONS__MALWARE_MALWARE__DEFAULT_DATE=
+      - TI_API__COLLECTIONS__MALWARE_MALWARE__ENABLE=false
+      - TI_API__COLLECTIONS__MALWARE_MALWARE__LOCAL_CUSTOM_TAG=null
+      - TI_API__COLLECTIONS__MALWARE_MALWARE__TTL=
+
+      - TI_API__COLLECTIONS__MALWARE_SIGNATURE__DEFAULT_DATE=
+      - TI_API__COLLECTIONS__MALWARE_SIGNATURE__ENABLE=false
+      - TI_API__COLLECTIONS__MALWARE_SIGNATURE__LOCAL_CUSTOM_TAG=null
+      - TI_API__COLLECTIONS__MALWARE_SIGNATURE__TTL=
+
+      - TI_API__COLLECTIONS__MALWARE_YARA__DEFAULT_DATE=
+      - TI_API__COLLECTIONS__MALWARE_YARA__ENABLE=false
+      - TI_API__COLLECTIONS__MALWARE_YARA__LOCAL_CUSTOM_TAG=null
+      - TI_API__COLLECTIONS__MALWARE_YARA__TTL=
+
+      - TI_API__COLLECTIONS__OSI_GIT_REPOSITORY__DEFAULT_DATE="Warning! Collection is not implemented in the current version"
+      - TI_API__COLLECTIONS__OSI_GIT_REPOSITORY__ENABLE=false
+      - TI_API__COLLECTIONS__OSI_GIT_REPOSITORY__LOCAL_CUSTOM_TAG=null
+      - TI_API__COLLECTIONS__OSI_GIT_REPOSITORY__TTL=30
+
+      - TI_API__COLLECTIONS__OSI_PUBLIC_LEAK__DEFAULT_DATE="Warning! Collection is not implemented in the current version"
+      - TI_API__COLLECTIONS__OSI_PUBLIC_LEAK__ENABLE=false
+      - TI_API__COLLECTIONS__OSI_PUBLIC_LEAK__LOCAL_CUSTOM_TAG=null
+      - TI_API__COLLECTIONS__OSI_PUBLIC_LEAK__TTL=30
+ 
+      - TI_API__COLLECTIONS__OSI_VULNERABILITY__DEFAULT_DATE=2025-05-03
+      - TI_API__COLLECTIONS__OSI_VULNERABILITY__ENABLE=true
+      - TI_API__COLLECTIONS__OSI_VULNERABILITY__LOCAL_CUSTOM_TAG=null
+      - TI_API__COLLECTIONS__OSI_VULNERABILITY__TTL=30
+ 
+      - TI_API__COLLECTIONS__SUSPICIOUS_IP_OPEN_PROXY__DEFAULT_DATE=2025-05-03
+      - TI_API__COLLECTIONS__SUSPICIOUS_IP_OPEN_PROXY__ENABLE=true
+      - TI_API__COLLECTIONS__SUSPICIOUS_IP_OPEN_PROXY__LOCAL_CUSTOM_TAG=null
+      - TI_API__COLLECTIONS__SUSPICIOUS_IP_OPEN_PROXY__TTL=15
+ 
+      - TI_API__COLLECTIONS__SUSPICIOUS_IP_SCANNER__DEFAULT_DATE=2025-05-03
+      - TI_API__COLLECTIONS__SUSPICIOUS_IP_SCANNER__ENABLE=true
+      - TI_API__COLLECTIONS__SUSPICIOUS_IP_SCANNER__LOCAL_CUSTOM_TAG=null
+      - TI_API__COLLECTIONS__SUSPICIOUS_IP_SCANNER__TTL=15
+ 
+      - TI_API__COLLECTIONS__SUSPICIOUS_IP_SOCKS_PROXY__DEFAULT_DATE=2025-05-03
+      - TI_API__COLLECTIONS__SUSPICIOUS_IP_SOCKS_PROXY__ENABLE=true
+      - TI_API__COLLECTIONS__SUSPICIOUS_IP_SOCKS_PROXY__LOCAL_CUSTOM_TAG=null
+      - TI_API__COLLECTIONS__SUSPICIOUS_IP_SOCKS_PROXY__TTL=2
+ 
+      - TI_API__COLLECTIONS__SUSPICIOUS_IP_TOR_NODE__DEFAULT_DATE=2025-05-03
+      - TI_API__COLLECTIONS__SUSPICIOUS_IP_TOR_NODE__ENABLE=true
+      - TI_API__COLLECTIONS__SUSPICIOUS_IP_TOR_NODE__LOCAL_CUSTOM_TAG=null
+      - TI_API__COLLECTIONS__SUSPICIOUS_IP_TOR_NODE__TTL=30
+ 
+      - TI_API__COLLECTIONS__SUSPICIOUS_IP_VPN__DEFAULT_DATE=2025-05-03
+      - TI_API__COLLECTIONS__SUSPICIOUS_IP_VPN__ENABLE=true
+      - TI_API__COLLECTIONS__SUSPICIOUS_IP_VPN__LOCAL_CUSTOM_TAG=null
+      - TI_API__COLLECTIONS__SUSPICIOUS_IP_VPN__TTL=30
     restart: always
     depends_on:
     - opencti
