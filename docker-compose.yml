@@ -127,7 +127,7 @@ services:
       - WORKER_LOG_LEVEL=info
     depends_on:
       opencti:
-          connector: service_healthy
+          condition: service_healthy
     deploy:
       mode: replicated
       replicas: 3
