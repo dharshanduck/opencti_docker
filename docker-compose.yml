@@ -332,7 +332,7 @@ services:
       - THREATFOX_X_OPENCTI_SCORE_URL=75
       - THREATFOX_X_OPENCTI_SCORE_HASH=80
       - THREATFOX_INTERVAL=3 # In days, must be strictly greater than 1
-      - THREATFOX_IOC_TO_IMPORT=all_types # List of IOC types to import
+      - THREATFOX_IOC_TO_IMPORT=ip:port,domain,url # List of IOC types to import
     restart: always
     depends_on:
       opencti:
