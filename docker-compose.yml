@@ -144,8 +144,8 @@ services:
       - CONNECTOR_LOG_LEVEL=info
     restart: always
     depends_on:
-      opencti:
-        condition: service_healthy
+      opencti: # <-- THIS IS THE SERVICE NAME, INDENTED 2 SPACES FROM 'depends_on'
+        condition: service_healthy # <-- THIS IS THE CONDITION, INDENTED 2 SPACES FROM 'opencti:'
   connector-export-file-csv:
     image: opencti/connector-export-file-csv:6.6.14
     environment:
