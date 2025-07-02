@@ -1,4 +1,6 @@
-# OpenCTI Docker deployment
+# THIS IS A FORK OF THE OFFICIAL OPENCTI DOCKER REPO, THIS IS A CUSTOM REPO. 
+
+# OpenCTI Docker deployment 
 
 ## Documentation
 
