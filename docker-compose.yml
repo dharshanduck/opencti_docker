@@ -472,16 +472,16 @@ services:
       - TI_API__COLLECTIONS__SUSPICIOUS_IP_VPN__ENABLE=true
       - TI_API__COLLECTIONS__SUSPICIOUS_IP_VPN__LOCAL_CUSTOM_TAG=null
       - TI_API__COLLECTIONS__SUSPICIOUS_IP_VPN__TTL=30
-    restart: always
+    restart: on-failure
     depends_on:
       - opencti
     command: >
-      /bin/sh -c "
-        until curl -s -f -o /dev/null "http://opencti:8080/graphql"; do
-          echo 'Waiting for OpenCTI GraphQL to be ready...'
-          sleep 10
+      sh -c "
+        echo 'Waiting for OpenCTI GraphQL to be ready...'
+        until curl -s -f -o /dev/null http://opencti:8080/graphql; do
+          sleep 5
         done
-        echo 'OpenCTI GraphQL is ready, starting connector.'
+        echo 'OpenCTI GraphQL is ready, executing connector...'
         /entrypoint.sh
       "
 
