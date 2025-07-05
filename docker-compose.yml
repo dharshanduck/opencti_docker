@@ -474,8 +474,16 @@ services:
       - TI_API__COLLECTIONS__SUSPICIOUS_IP_VPN__TTL=30
     restart: always
     depends_on:
-      opencti:
-       condition: service_healthy
+      - opencti
+    command: >
+      /bin/sh -c "
+        while ! wget -qO- http://opencti:8080/health?health_access_key=${OPENCTI_HEALTHCHECK_ACCESS_KEY}; do
+          echo 'Waiting for OpenCTI to be healthy...'
+          sleep 5
+        done
+        /entrypoint.sh
+      "
+
 volumes:
   esdata:
   s3data:
