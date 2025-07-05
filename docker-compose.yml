@@ -17,12 +17,8 @@ services:
     volumes:
       - esdata:/usr/share/elasticsearch/data
     environment:
-      # config listen on all iface - dharshan
       - network.host=0.0.0.0
-      # Comment-out the line below for a cluster of multiple nodes
       - discovery.type=single-node
-      # Uncomment the line below below for a cluster of multiple nodes
-      # - cluster.name=docker-cluster
       - xpack.ml.enabled=false
       - xpack.security.enabled=false
       - thread_pool.search.queue_size=5000
@@ -42,7 +38,7 @@ services:
       timeout: 10s
       retries: 50
   minio:
-    image: minio/minio:RELEASE.2024-05-28T17-19-04Z # Use "minio/minio:RELEASE.2024-05-28T17-19-04Z-cpuv1" to troubleshoot compatibility issues with CPU
+    image: minio/minio:RELEASE.2024-05-28T17-19-04Z
     volumes:
       - s3data:/data
     ports:
@@ -86,7 +82,6 @@ services:
       - REDIS__HOSTNAME=redis
       - REDIS__PORT=6379
       - ELASTICSEARCH__URL=http://elasticsearch:9200
-     # - ELASTICSEARCH__NUMBER_OF_REPLICAS=0
       - MINIO__ENDPOINT=minio
       - MINIO__PORT=9000
       - MINIO__USE_SSL=false
@@ -136,7 +131,7 @@ services:
     environment:
       - OPENCTI_URL=http://opencti:8080
       - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
-      - CONNECTOR_ID=${CONNECTOR_EXPORT_FILE_STIX_ID} # Valid UUIDv4
+      - CONNECTOR_ID=${CONNECTOR_EXPORT_FILE_STIX_ID}
       - CONNECTOR_TYPE=INTERNAL_EXPORT_FILE
       - CONNECTOR_NAME=ExportFileStix2
       - CONNECTOR_SCOPE=application/json
@@ -149,7 +144,7 @@ services:
     environment:
       - OPENCTI_URL=http://opencti:8080
       - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
-      - CONNECTOR_ID=${CONNECTOR_EXPORT_FILE_CSV_ID} # Valid UUIDv4
+      - CONNECTOR_ID=${CONNECTOR_EXPORT_FILE_CSV_ID}
       - CONNECTOR_TYPE=INTERNAL_EXPORT_FILE
       - CONNECTOR_NAME=ExportFileCsv
       - CONNECTOR_SCOPE=text/csv
@@ -162,7 +157,7 @@ services:
     environment:
       - OPENCTI_URL=http://opencti:8080
       - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
-      - CONNECTOR_ID=${CONNECTOR_EXPORT_FILE_TXT_ID} # Valid UUIDv4
+      - CONNECTOR_ID=${CONNECTOR_EXPORT_FILE_TXT_ID}
       - CONNECTOR_TYPE=INTERNAL_EXPORT_FILE
       - CONNECTOR_NAME=ExportFileTxt
       - CONNECTOR_SCOPE=text/plain
@@ -175,12 +170,12 @@ services:
     environment:
       - OPENCTI_URL=http://opencti:8080
       - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
-      - CONNECTOR_ID=${CONNECTOR_IMPORT_FILE_STIX_ID} # Valid UUIDv4
+      - CONNECTOR_ID=${CONNECTOR_IMPORT_FILE_STIX_ID}
       - CONNECTOR_TYPE=INTERNAL_IMPORT_FILE
       - CONNECTOR_NAME=ImportFileStix
-      - CONNECTOR_VALIDATE_BEFORE_IMPORT=true # Validate any bundle before import
+      - CONNECTOR_VALIDATE_BEFORE_IMPORT=true
       - CONNECTOR_SCOPE=application/json,text/xml
-      - CONNECTOR_AUTO=true # Enable/disable auto-import of file
+      - CONNECTOR_AUTO=true
       - CONNECTOR_LOG_LEVEL=info
     restart: always
     depends_on:
@@ -190,14 +185,14 @@ services:
     environment:
       - OPENCTI_URL=http://opencti:8080
       - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
-      - CONNECTOR_ID=${CONNECTOR_IMPORT_DOCUMENT_ID} # Valid UUIDv4
+      - CONNECTOR_ID=${CONNECTOR_IMPORT_DOCUMENT_ID}
       - CONNECTOR_TYPE=INTERNAL_IMPORT_FILE
       - CONNECTOR_NAME=ImportDocument
-      - CONNECTOR_VALIDATE_BEFORE_IMPORT=true # Validate any bundle before import
+      - CONNECTOR_VALIDATE_BEFORE_IMPORT=true
       - CONNECTOR_SCOPE=application/pdf,text/plain,text/html
-      - CONNECTOR_AUTO=true # Enable/disable auto-import of file
-      - CONNECTOR_ONLY_CONTEXTUAL=false # Only extract data related to an entity (a report, a threat actor, etc.)
-      - CONNECTOR_CONFIDENCE_LEVEL=15 # From 0 (Unknown) to 100 (Fully trusted)
+      - CONNECTOR_AUTO=true
+      - CONNECTOR_ONLY_CONTEXTUAL=false
+      - CONNECTOR_CONFIDENCE_LEVEL=15
       - CONNECTOR_LOG_LEVEL=info
       - IMPORT_DOCUMENT_CREATE_INDICATOR=true
     restart: always
@@ -208,14 +203,14 @@ services:
     environment:
       - OPENCTI_URL=http://opencti:8080
       - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
-      - CONNECTOR_ID=${CONNECTOR_ANALYSIS_ID} # Valid UUIDv4
+      - CONNECTOR_ID=${CONNECTOR_ANALYSIS_ID}
       - CONNECTOR_TYPE=INTERNAL_ANALYSIS
       - CONNECTOR_NAME=ImportDocumentAnalysis
-      - CONNECTOR_VALIDATE_BEFORE_IMPORT=false # Validate any bundle before import
+      - CONNECTOR_VALIDATE_BEFORE_IMPORT=false
       - CONNECTOR_SCOPE=application/pdf,text/plain,text/html
-      - CONNECTOR_AUTO=true # Enable/disable auto-import of file
-      - CONNECTOR_ONLY_CONTEXTUAL=false # Only extract data related to an entity (a report, a threat actor, etc.)
-      - CONNECTOR_CONFIDENCE_LEVEL=15 # From 0 (Unknown) to 100 (Fully trusted)
+      - CONNECTOR_AUTO=true
+      - CONNECTOR_ONLY_CONTEXTUAL=false
+      - CONNECTOR_CONFIDENCE_LEVEL=15
       - CONNECTOR_LOG_LEVEL=info
     restart: always
     depends_on:
@@ -247,7 +242,7 @@ services:
       - CONNECTOR_RUN_AND_TERMINATE=false
       - CONNECTOR_LOG_LEVEL=error
       - MITRE_ATLAS_URL=https://raw.githubusercontent.com/mitre-atlas/atlas-navigator-data/main/dist/stix-atlas.json
-      - MITRE_ATLAS_INTERVAL=7 # In days, must be strictly greater than 1
+      - MITRE_ATLAS_INTERVAL=7
     restart: always
     depends_on:
       - opencti
@@ -262,7 +257,7 @@ services:
       - CONNECTOR_RUN_AND_TERMINATE=false
       - CONNECTOR_LOG_LEVEL=error
       - MITRE_REMOVE_STATEMENT_MARKING=true
-      - MITRE_INTERVAL=7 # In days, must be strictly greater than 1
+      - MITRE_INTERVAL=7
     restart: always
     depends_on:
       - opencti
@@ -281,7 +276,7 @@ services:
       - CONFIG_GEOGRAPHY_FILE_URL=https://raw.githubusercontent.com/OpenCTI-Platform/datasets/master/data/geography.json
       - CONFIG_COMPANIES_FILE_URL=https://raw.githubusercontent.com/OpenCTI-Platform/datasets/master/data/companies.json
       - CONFIG_REMOVE_CREATOR=true
-      - CONFIG_INTERVAL=7 # In days
+      - CONFIG_INTERVAL=7
     restart: always
     depends_on:
       - opencti
@@ -319,67 +314,44 @@ services:
       - THREATFOX_X_OPENCTI_SCORE_DOMAIN=70
       - THREATFOX_X_OPENCTI_SCORE_URL=75
       - THREATFOX_X_OPENCTI_SCORE_HASH=80
-      - THREATFOX_INTERVAL=3 # In days, must be strictly greater than 1
-      - THREATFOX_IOC_TO_IMPORT=ip:port,domain,url # List of IOC types to import
+      - THREATFOX_INTERVAL=3
+      - THREATFOX_IOC_TO_IMPORT=ip:port,domain,url
     restart: always
     depends_on:
       - opencti
   connector-group-ib:
     image: opencti/connector-group-ib:6.6.14
     environment:
-      # === OpenCTI Server ===
       - OPENCTI_URL=http://opencti:8080
-      # Use one as provided by the OpenCTI platform
       - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
-      # === OpenCTI Connector ===
-      # Docker container name
       - CONNECTOR_DOCKER_CONTAINER_NAME=gib_connector
-      # Generate one with uuidgen (https://www.uuidgenerator.net/version4)
       - CONNECTOR_ID=${CONNECTOR_GIB_ID}
       - CONNECTOR_TYPE=EXTERNAL_IMPORT
       - CONNECTOR_NAME=Group-IB Connector
       - CONNECTOR_SCOPE=stix2,ipv4-addr,ipv6-addr,vulnerability,domain,url,StixFile
-      # One of the following: debug, info, warning, error
       - CONNECTOR_LOG_LEVEL=debug
-      # Specifies the time interval in ISO 8601 format (Duration):
-      # Format: P[n]Y[n]M[n]DT[n]H[n]M[n]S
-      # - P: indicates the beginning of the period (Period).
-      # - T: separates date and time, used before time components.
-      # - n: a number representing a quantity (e.g. 3 for 3 minutes).
-      # 
-      # Examples:
-      # - PT3M: an interval of 3 minutes.
-      # - PT5S: an interval of 5 seconds.
-      # - P1DT2H: an interval of 1 day and 2 hours.
       - CONNECTOR_DURATION_PERIOD=PT30M
       - CONNECTOR_UPDATE_EXISTING_DATA=true
-      # === RabbitMQ Server used for integration manual run ===
       - CONNECTOR_MQ_HOST=localhost
       - CONNECTOR_MQ_PORT=5672
       - CONNECTOR_MQ_VHOST=/
       - CONNECTOR_MQ_USE_SSL=false
       - CONNECTOR_MQ_USER=guest
       - CONNECTOR_MQ_PASS=guest
-      # === Threat Intelligence API Server ===
-      # Connector specific parameters. All params are mandatory.
       - TI_API__URL=https://tap.group-ib.com/api/v2/
       - TI_API__USERNAME=${CONNECTOR_GIB_ID_API_KEY}
       - TI_API__TOKEN=${CONNECTOR_GIB_ID_API_USERNAME}
-      # === Threat Intelligence API Proxy ===
-      # Proxy specifc parameters. You can leave them blank.
       - TI_API__PROXY__IP=
       - TI_API__PROXY__PORT=
       - TI_API__PROXY__PROTOCOL=
       - TI_API__PROXY__USERNAME=
       - TI_API__PROXY__PASSWORD=
-      # Threat Intelligence Collections settings
       - TI_API__EXTRA_SETTINGS__IGNORE_NON_INDICATOR_THREAT_REPORTS=false
       - TI_API__EXTRA_SETTINGS__IGNORE_NON_INDICATOR_THREATS=false
       - TI_API__EXTRA_SETTINGS__IGNORE_NON_MALWARE_DDOS=true
       - TI_API__EXTRA_SETTINGS__INTRUSION_SET_INSTEAD_OF_THREAT_ACTOR=false
       - TI_API__EXTRA_SETTINGS__SCHEDULE_TIME=00:00
       - TI_API__EXTRA_SETTINGS__TIME_OUTPUT_FORMAT='%Y-%m-%d %H:%M:%S'
-      # Collections
       - TI_API__COLLECTIONS__APT_THREAT__DEFAULT_DATE=2025-06-08
       - TI_API__COLLECTIONS__APT_THREAT__ENABLE=true
       - TI_API__COLLECTIONS__APT_THREAT__LOCAL_CUSTOM_TAG=null
@@ -478,7 +450,7 @@ services:
       - TI_API__COLLECTIONS__OSI_GIT_REPOSITORY__TTL=30
       - TI_API__COLLECTIONS__OSI_PUBLIC_LEAK__DEFAULT_DATE=2025-06-08
       - TI_API__COLLECTIONS__OSI_PUBLIC_LEAK__ENABLE=false
-      - TI_API__COLLECTIONS__OSI_PUBLIC_LEAK__LOCAL_CUSTOM_TAG=null
+      - TI_API__COLLECTIONS__OSI_PUBLIC_LEAK__LOCAL_custom_TAG=null
       - TI_API__COLLECTIONS__OSI_PUBLIC_LEAK__TTL=30
       - TI_API__COLLECTIONS__OSI_VULNERABILITY__DEFAULT_DATE=2025-05-03
       - TI_API__COLLECTIONS__OSI_VULNERABILITY__ENABLE=true
