@@ -105,11 +105,6 @@ services:
       - minio
       - rabbitmq
     restart: always
-    healthcheck:
-      test: ["CMD", "wget", "-qO-", "http://localhost:8080/health?health_access_key=${OPENCTI_HEALTHCHECK_ACCESS_KEY}"]
-      interval: 10s
-      timeout: 5s
-      retries: 20
   worker:
     image: opencti/worker:6.7.3
     environment:
@@ -364,7 +359,7 @@ services:
       - TI_API__COLLECTIONS__ATTACKS_DEFACE__ENABLE=true
       - TI_API__COLLECTIONS__ATTACKS_DEFACE__LOCAL_CUSTOM_TAG=null
       - TI_API__COLLECTIONS__ATTACKS_DEFACE__TTL=30
-      - TI_API__COLLECTIONS__ATTACKS_PHISHING_GROUP__DEFAULT_DATE=2025-06-08
+      - TI_API__COLLECTIONS__ATTACKS_PHISHING_GROUP__DEFAULT_date=2025-06-08
       - TI_API__COLLECTIONS__ATTACKS_PHISHING_GROUP__ENABLE=false
       - TI_API__COLLECTIONS__ATTACKS_PHISHING_GROUP__LOCAL_CUSTOM_TAG=null
       - TI_API__COLLECTIONS__ATTACKS_PHISHING_GROUP__TTL=30
@@ -478,7 +473,7 @@ services:
     command: >
       sh -c "
         echo 'Waiting for OpenCTI GraphQL to be ready...'
-        until curl -s -f -o /dev/null http://opencti:8080/graphql; do
+        until curl -s -f -o /dev/null http://opencti:8080/public/graphql; do
           sleep 5
         done
         echo 'OpenCTI GraphQL is ready, executing connector...'
