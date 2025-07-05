@@ -5,6 +5,8 @@ services:
     restart: always
     volumes:
       - redisdata:/data
+    networks:
+      - opencti-net
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
@@ -32,6 +34,8 @@ services:
       nofile:
         soft: 65536
         hard: 65536
+    networks:
+      - opencti-net
     healthcheck:
       test: ["CMD", "curl", "-s", "http://localhost:9200"]
       interval: 60s
@@ -48,6 +52,8 @@ services:
       MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
     command: server /data
     restart: always
+    networks:
+      - opencti-net
     healthcheck:
       test: ["CMD", "mc", "ready", "local"]
       interval: 10s
@@ -64,6 +70,8 @@ services:
     volumes:
       - amqpdata:/var/lib/rabbitmq
     restart: always
+    networks:
+      - opencti-net
     healthcheck:
       test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
       interval: 30s
@@ -105,6 +113,15 @@ services:
       - minio
       - rabbitmq
     restart: always
+    networks:
+      - opencti-net
+  wait-for-opencti:
+    image: docker/wait
+    depends_on:
+      - opencti
+    command: -c "http://opencti:8080/public/graphql" -t 300 -s 5
+    networks:
+      - opencti-net
   worker:
     image: opencti/worker:6.7.3
     environment:
@@ -117,6 +134,8 @@ services:
       mode: replicated
       replicas: 3
     restart: always
+    networks:
+      - opencti-net
   connector-export-file-stix:
     image: opencti/connector-export-file-stix:6.7.3
     environment:
@@ -130,6 +149,8 @@ services:
     restart: always
     depends_on:
       - opencti
+    networks:
+      - opencti-net
   connector-export-file-csv:
     image: opencti/connector-export-file-csv:6.7.3
     environment:
@@ -143,6 +164,8 @@ services:
     restart: always
     depends_on:
       - opencti
+    networks:
+      - opencti-net
   connector-export-file-txt:
     image: opencti/connector-export-file-txt:6.7.3
     environment:
@@ -156,6 +179,8 @@ services:
     restart: always
     depends_on:
       - opencti
+    networks:
+      - opencti-net
   connector-import-file-stix:
     image: opencti/connector-import-file-stix:6.7.3
     environment:
@@ -171,6 +196,8 @@ services:
     restart: always
     depends_on:
       - opencti
+    networks:
+      - opencti-net
   connector-import-document:
     image: opencti/connector-import-document:6.7.3
     environment:
@@ -189,6 +216,8 @@ services:
     restart: always
     depends_on:
       - opencti
+    networks:
+      - opencti-net
   connector-analysis:
     image: opencti/connector-import-document:6.7.3
     environment:
@@ -206,6 +235,8 @@ services:
     restart: always
     depends_on:
       - opencti
+    networks:
+      - opencti-net
   connector-cisa-known-exploited-vulnerabilities:
     image: opencti/connector-cisa-known-exploited-vulnerabilities:6.7.3
     environment:
@@ -222,6 +253,8 @@ services:
     restart: always
     depends_on:
       - opencti
+    networks:
+      - opencti-net
   connector-mitre-atlas:
     image: opencti/connector-mitre-atlas:6.7.3
     environment:
@@ -237,6 +270,8 @@ services:
     restart: always
     depends_on:
       - opencti
+    networks:
+      - opencti-net
   connector-mitre:
     image: opencti/connector-mitre:6.7.3
     environment:
@@ -252,6 +287,8 @@ services:
     restart: always
     depends_on:
       - opencti
+    networks:
+      - opencti-net
   connector-opencti:
     image: opencti/connector-opencti:6.7.3
     environment:
@@ -271,6 +308,8 @@ services:
     restart: always
     depends_on:
       - opencti
+    networks:
+      - opencti-net
   connector-malwarebazaar-recent-additions:
     image: opencti/connector-malwarebazaar-recent-additions:6.7.3
     environment:
@@ -288,6 +327,8 @@ services:
     restart: always
     depends_on:
       - opencti
+    networks:
+      - opencti-net
   connector-threatfox:
     image: opencti/connector-threatfox:6.7.3
     environment:
@@ -310,6 +351,8 @@ services:
     restart: always
     depends_on:
       - opencti
+    networks:
+      - opencti-net
   connector-group-ib:
     image: opencti/connector-group-ib:6.7.3
     environment:
@@ -469,18 +512,11 @@ services:
       - TI_API__COLLECTIONS__SUSPICIOUS_IP_VPN__TTL=30
     restart: on-failure
     depends_on:
-      - opencti
-    command: >
-      sh -c "
-        echo 'Waiting 3 minutes for OpenCTI to initialize...'
-        sleep 180
-        echo 'Waiting for OpenCTI GraphQL to be ready...'
-        until curl -s -f -o /dev/null http://opencti:8080/public/graphql; do
-          sleep 5
-        done
-        echo 'OpenCTI GraphQL is ready, executing connector...'
-        /entrypoint.sh
-      "
+      - wait-for-opencti
+
+networks:
+  opencti-net:
+    driver: bridge
 
 volumes:
   esdata:
