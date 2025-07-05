@@ -472,6 +472,8 @@ services:
       - opencti
     command: >
       sh -c "
+        echo 'Waiting 3 minutes for OpenCTI to initialize...'
+        sleep 180
         echo 'Waiting for OpenCTI GraphQL to be ready...'
         until curl -s -f -o /dev/null http://opencti:8080/public/graphql; do
           sleep 5
