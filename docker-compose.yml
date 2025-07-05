@@ -328,7 +328,7 @@ services:
       - CONNECTOR_LOG_LEVEL=debug
       - CONNECTOR_DURATION_PERIOD=PT30M
       - CONNECTOR_UPDATE_EXISTING_DATA=true
-      - CONNECTOR_MQ_HOST=localhost
+      - CONNECTOR_MQ_HOST=rabbitmq
       - CONNECTOR_MQ_PORT=5672
       - CONNECTOR_MQ_VHOST=/
       - CONNECTOR_MQ_USE_SSL=false
@@ -474,7 +474,8 @@ services:
       - TI_API__COLLECTIONS__SUSPICIOUS_IP_VPN__TTL=30
     restart: always
     depends_on:
-      - opencti
+      opencti:
+       condition: service_healthy
 volumes:
   esdata:
   s3data:
