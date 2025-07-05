@@ -477,10 +477,11 @@ services:
       - opencti
     command: >
       /bin/sh -c "
-        while ! wget -qO- http://opencti:8080/health?health_access_key=${OPENCTI_HEALTHCHECK_ACCESS_KEY}; do
-          echo 'Waiting for OpenCTI to be healthy...'
-          sleep 5
+        until curl -s -f -o /dev/null "http://opencti:8080/graphql"; do
+          echo 'Waiting for OpenCTI GraphQL to be ready...'
+          sleep 10
         done
+        echo 'OpenCTI GraphQL is ready, starting connector.'
         /entrypoint.sh
       "
 
