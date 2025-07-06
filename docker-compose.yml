@@ -119,6 +119,8 @@ services:
     depends_on:
       - opencti
     restart: always
+    deploy:
+      replicas: 5
 
   connector-export-file-stix:
     image: opencti/connector-export-file-stix:6.7.3
