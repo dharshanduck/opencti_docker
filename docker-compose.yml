@@ -345,8 +345,8 @@ services:
       - CONNECTOR_MQ_USER=guest
       - CONNECTOR_MQ_PASS=guest
       - TI_API__URL=https://tap.group-ib.com/api/v2/
-      - TI_API__USERNAME=${CONNECTOR_GIB_ID_API_KEY}
-      - TI_API__TOKEN=${CONNECTOR_GIB_ID_API_USERNAME}
+      - TI_API__USERNAME=${CONNECTOR_GIB_ID_API_USERNAME}
+      - TI_API__TOKEN=${CONNECTOR_GIB_ID_API_KEY}
       - TI_API__PROXY__IP=
       - TI_API__PROXY__PORT=
       - TI_API__PROXY__PROTOCOL=
