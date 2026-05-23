@@ -328,6 +328,33 @@ services:
       opencti:
         condition: service_healthy      
 
+  ###########################
+  # EXTERNAL CONNECTORS     #
+  ###########################
+
+  connector-group-ib:
+    image: opencti/connector-group-ib:latest
+    environment:
+      - OPENCTI_URL=http://opencti:8080
+      - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
+      - CONNECTOR_ID=${CONNECTOR_GROUP_IB_ID}
+      - CONNECTOR_TYPE=EXTERNAL_IMPORT
+      - "CONNECTOR_NAME=Group-IB Threat Intelligence"
+      - CONNECTOR_SCOPE=group-ib
+      - CONNECTOR_CONFIDENCE_LEVEL=${CONNECTOR_GROUP_IB_CONFIDENCE_LEVEL:-80}
+      - CONNECTOR_UPDATE_EXISTING_DATA=true
+      - CONNECTOR_LOG_LEVEL=info
+      - GROUP_IB_BASE_URL=${GROUP_IB_BASE_URL}
+      - GROUP_IB_USERNAME=${GROUP_IB_USERNAME}
+      - GROUP_IB_API_KEY=${GROUP_IB_API_KEY}
+      - GROUP_IB_COLLECTIONS=${GROUP_IB_COLLECTIONS}
+      - GROUP_IB_IMPORT_EXTRA_ENTITIES=${GROUP_IB_IMPORT_EXTRA_ENTITIES:-false}
+      - GROUP_IB_INTERVAL=${GROUP_IB_INTERVAL:-5}
+    restart: always
+    depends_on:
+      opencti:
+        condition: service_healthy
+
 volumes:
   esdata:
   s3data:
