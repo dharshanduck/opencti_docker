@@ -350,6 +350,11 @@ services:
       - GROUP_IB_COLLECTIONS=${GROUP_IB_COLLECTIONS}
       - GROUP_IB_IMPORT_EXTRA_ENTITIES=${GROUP_IB_IMPORT_EXTRA_ENTITIES:-false}
       - CONNECTOR_DURATION_PERIOD=PT5M
+      # Group-IB Proxy bypass variables
+      - GROUP_IB_TI_API_PROXY_IP=
+      - GROUP_IB_TI_API_PROXY_PORT=
+      - GROUP_IB_TI_API_PROXY_LOGIN=
+      - GROUP_IB_TI_API_PROXY_PASSWORD=
     restart: always
     depends_on:
       opencti:
