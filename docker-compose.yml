@@ -355,6 +355,14 @@ services:
       - GROUP_IB_TI_API_PROXY_PORT=null
       - GROUP_IB_TI_API_PROXY_LOGIN=null
       - GROUP_IB_TI_API_PROXY_PASSWORD=null
+      - CONNECTOR_TI_API_PROXY_IP=
+      - CONNECTOR_TI_API_PROXY_PORT=
+      - CONNECTOR_TI_API_PROXY_LOGIN=
+      - CONNECTOR_TI_API_PROXY_PASSWORD=
+      - TI_API_PROXY_IP=
+      - TI_API_PROXY_PORT=
+      - TI_API_PROXY_LOGIN=
+      - TI_API_PROXY_PASSWORD=
     restart: always
     depends_on:
       opencti:
