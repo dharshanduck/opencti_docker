@@ -415,7 +415,7 @@ services:
       - CROWDSEC_CREATE_TARGETED_COUNTRIES_SIGHTINGS=true
       - CROWDSEC_VULNERABILITY_CREATE_FROM_CVE=true
     ports:
-      - "8081:8081
+      - "8081:8081"
     restart: always
     depends_on:
       opencti:
