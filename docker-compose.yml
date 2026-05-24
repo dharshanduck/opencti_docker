@@ -390,6 +390,37 @@ services:
       - FIRST_EPSS_MAX_TLP=TLP:AMBER # Optional (default: 'TLP:AMBER')
     restart: always
 
+  connector-crowdsec:
+    image: opencti/connector-crowdsec:latest
+    environment:
+      - OPENCTI_URL=http://opencti:8080
+      - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
+      - CONNECTOR_ID=${CONNECTOR_CROWDSEC_ID}
+      - CONNECTOR_NAME=CrowdSec
+      - CONNECTOR_SCOPE=IPv4-Addr,IPv6-Addr
+      - CONNECTOR_LOG_LEVEL=debug
+      - CONNECTOR_AUTO=true
+      - CONNECTOR_UPDATE_EXISTING_DATA=false
+      - CROWDSEC_KEY=ChangeMe
+      - CROWDSEC_API_VERSION=v2
+      - CROWDSEC_MAX_TLP=TLP:AMBER
+      - CROWDSEC_LABELS_SCENARIO_NAME=true
+      - CROWDSEC_LABELS_CVE=true
+      - CROWDSEC_LABELS_MITRE=true
+      - CROWDSEC_LABELS_REPUTATION=true
+      - CROWDSEC_INDICATOR_CREATE_FROM=malicious,suspicious,known
+      - CROWDSEC_ATTACK_PATTERN_CREATE_FROM_MITRE=true
+      - CROWDSEC_CREATE_NOTE=true
+      - CROWDSEC_CREATE_SIGHTING=true
+      - CROWDSEC_CREATE_TARGETED_COUNTRIES_SIGHTINGS=true
+      - CROWDSEC_VULNERABILITY_CREATE_FROM_CVE=true
+    ports:
+      - "8081:8081
+    restart: always
+    depends_on:
+      opencti:
+        condition: service_healthy
+
 
   ###########################
   # EXTERNAL CONNECTORS     #
