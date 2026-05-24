@@ -474,6 +474,25 @@ services:
     depends_on:
       opencti:
         condition: service_healthy
+        
+  connector-cvelistv5:
+    image: opencti/connector-cvelistv5:latest
+    environment:
+      - OPENCTI_URL=http://opencti:8080
+      - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
+      - CONNECTOR_ID=${CONNECTOR_CVELIST_ID}
+      - CONNECTOR_NAME=CVEProject cvelistV5
+      - CONNECTOR_SCOPE=identity,vulnerability,software
+      - CONNECTOR_LOG_LEVEL=debug
+      - CONNECTOR_DURATION_PERIOD=PT1H # ISO 8601 duration period
+      # Optional overrides
+      # - CVELISTV5_REPO_URL=https://github.com/CVEProject/cvelistV5.git
+      # - CVELISTV5_REPO_BRANCH=main
+      # - CVELISTV5_LOCAL_PATH=/opt/cvelistV5
+      - CVELISTV5_HISTORY_START_YEAR=2019 # Min 2019 to ensure CVSS v3.1 coverage
+    volumes:
+      - cvelistv5-clone:/opt/cvelistV5
+    restart: always
 
 volumes:
   esdata:
