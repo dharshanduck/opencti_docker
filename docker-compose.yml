@@ -344,7 +344,6 @@ services:
       - CONNECTOR_AUTO=false # Enable/disable auto-enrichment of observables
       - CONNECTOR_LOG_LEVEL=debug
       - CONNECTOR_EXPOSE_METRICS=false
-
       - VIRUSTOTAL_TOKEN=${VIRUSTOTAL_API_KEY}
 #      - VIRUSTOTAL_MAX_TLP=TLP:AMBER
 #      - VIRUSTOTAL_REPLACE_WITH_LOWER_SCORE=true # Whether to keep the higher of the VT or existing score (false) or force the score to be updated with the VT score even if its lower than existing score (true).
