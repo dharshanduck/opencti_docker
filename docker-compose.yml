@@ -551,7 +551,7 @@ services:
       - CONNECTOR_NAME=CISA KEV
       - CONNECTOR_SCOPE=cisa
       - CONNECTOR_LOG_LEVEL=info
-      - CONNECTOR_DURATION_PERIOD=P1H
+      - CONNECTOR_DURATION_PERIOD=PT1H
       - CISA_CATALOG_URL=https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json
       - CISA_CREATE_INFRASTRUCTURES=true
       - CISA_KEV_FLAG_ONLY=false
