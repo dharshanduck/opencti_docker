@@ -339,7 +339,7 @@ services:
       - OPENCTI_URL=http://opencti:8080
       - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
       - CONNECTOR_ID=${CONNECTOR_VIRUSTOTAL_ID}
-      - CONNECTOR_NAME=VirusTotal
+      - "CONNECTOR_NAME=VirusTotal"
       - CONNECTOR_SCOPE=StixFile,Artifact,IPv4-Addr,Domain-Name,Url,Hostname
       - CONNECTOR_AUTO=false # Enable/disable auto-enrichment of observables
       - CONNECTOR_LOG_LEVEL=debug
@@ -348,7 +348,7 @@ services:
 #      - VIRUSTOTAL_MAX_TLP=TLP:AMBER
 #      - VIRUSTOTAL_REPLACE_WITH_LOWER_SCORE=true # Whether to keep the higher of the VT or existing score (false) or force the score to be updated with the VT score even if its lower than existing score (true).
 #      # File/Artifact specific config settings
-     - VIRUSTOTAL_FILE_CREATE_NOTE_FULL_REPORT=true # Whether or not to include the full report as a Note
+      - VIRUSTOTAL_FILE_CREATE_NOTE_FULL_REPORT=true # Whether or not to include the full report as a Note
 #      - VIRUSTOTAL_FILE_UPLOAD_UNSEEN_ARTIFACTS=true # Whether to upload artifacts (smaller than 32MB) that VirusTotal has no record of
 #      - VIRUSTOTAL_FILE_INDICATOR_CREATE_POSITIVES=10 # Create an indicator for File/Artifact based observables once this positive threshold is reached. Note: specify 0 to disable indicator creation
 #      - VIRUSTOTAL_FILE_INDICATOR_VALID_MINUTES=2880 # How long the indicator is valid for in minutes
