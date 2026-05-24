@@ -494,6 +494,13 @@ services:
       - cvelistv5-clone:/opt/cvelistV5
     restart: always
 
+  connector-cisa-known-exploited-vulnerabilities:
+    image: opencti/connector-cisa-known-exploited-vulnerabilities:latest
+    environment:
+      - OPENCTI_URL=http://opencti:8080
+      - OPENCTI_TOKEN=${CONNECTOR_CISAKEV_ID}
+    restart: always
+
 volumes:
   esdata:
   s3data:
