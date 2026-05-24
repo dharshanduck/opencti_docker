@@ -351,10 +351,10 @@ services:
       - GROUP_IB_IMPORT_EXTRA_ENTITIES=${GROUP_IB_IMPORT_EXTRA_ENTITIES:-false}
       - CONNECTOR_DURATION_PERIOD=PT5M
       # Group-IB Proxy bypass variables
-      - GROUP_IB_TI_API_PROXY_IP=
-      - GROUP_IB_TI_API_PROXY_PORT=
-      - GROUP_IB_TI_API_PROXY_LOGIN=
-      - GROUP_IB_TI_API_PROXY_PASSWORD=
+      - GROUP_IB_TI_API_PROXY_IP=null
+      - GROUP_IB_TI_API_PROXY_PORT=null
+      - GROUP_IB_TI_API_PROXY_LOGIN=null
+      - GROUP_IB_TI_API_PROXY_PASSWORD=null
     restart: always
     depends_on:
       opencti:
