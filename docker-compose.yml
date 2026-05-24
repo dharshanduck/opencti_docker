@@ -341,7 +341,7 @@ services:
       - CONNECTOR_ID=${CONNECTOR_VIRUSTOTAL_ID}
       - "CONNECTOR_NAME=VirusTotal"
       - CONNECTOR_SCOPE=StixFile,Artifact,IPv4-Addr,Domain-Name,Url,Hostname
-      - CONNECTOR_AUTO=false # Enable/disable auto-enrichment of observables
+      - CONNECTOR_AUTO=true # Enable/disable auto-enrichment of observables
       - CONNECTOR_LOG_LEVEL=debug
       - CONNECTOR_EXPOSE_METRICS=false
       - VIRUSTOTAL_TOKEN=${VIRUSTOTAL_API_KEY}
