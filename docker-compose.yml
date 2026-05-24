@@ -552,7 +552,7 @@ services:
       - CONNECTOR_SCOPE=cisa
       - CONNECTOR_LOG_LEVEL=info
       - CONNECTOR_DURATION_PERIOD=PT1H
-      - CISA_CATALOG_URL=https://raw.githubusercontent.com/cisagov/kev-data/refs/heads/develop/known_exploited_vulnerabilities.csv
+      - CISA_CATALOG_URL=https://raw.githubusercontent.com/cisagov/kev-data/refs/heads/develop/known_exploited_vulnerabilities.json
       - CISA_CREATE_INFRASTRUCTURES=true
       - CISA_KEV_FLAG_ONLY=false
       - CISA_TLP=TLP:CLEAR
