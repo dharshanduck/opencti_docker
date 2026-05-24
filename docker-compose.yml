@@ -516,3 +516,5 @@ volumes:
   redisdata:
   amqpdata:
   rsakeys:
+  cvelistv5-clone:
+  
