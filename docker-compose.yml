@@ -333,7 +333,7 @@ services:
   ###########################
 
   connector-group-ib:
-    image: opencti/connector-group-ib:latest
+    image: opencti/connector-group-ib:6.9.28
     environment:
       - OPENCTI_URL=http://opencti:8080
       - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
