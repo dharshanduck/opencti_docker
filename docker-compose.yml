@@ -73,6 +73,9 @@ services:
       retries: 3
   rabbitmq:
     image: rabbitmq:4.3-management
+    ports:
+      - "5672:5672"    # AMQP port (used by OpenCTI)
+      - "15672:15672"  # Management UI port (add this line)
     environment:
       - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
       - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
