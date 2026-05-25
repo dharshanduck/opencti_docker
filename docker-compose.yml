@@ -176,7 +176,7 @@ services:
         condition: service_healthy
     deploy:
       mode: replicated
-      replicas: 5
+      replicas: 8
     restart: always
 
   ###########################
@@ -341,7 +341,7 @@ services:
       - CONNECTOR_ID=${CONNECTOR_VIRUSTOTAL_ID}
       - "CONNECTOR_NAME=VirusTotal"
       - CONNECTOR_SCOPE=StixFile,Artifact,IPv4-Addr,Domain-Name,Url,Hostname
-      - CONNECTOR_AUTO=true # Enable/disable auto-enrichment of observables
+      - CONNECTOR_AUTO=false # Enable/disable auto-enrichment of observables
       - CONNECTOR_LOG_LEVEL=error
       - CONNECTOR_EXPOSE_METRICS=false
       - VIRUSTOTAL_TOKEN=${VIRUSTOTAL_API_KEY}
@@ -438,7 +438,7 @@ services:
       - CONNECTOR_CONFIDENCE_LEVEL=${CONNECTOR_GROUP_IB_CONFIDENCE_LEVEL:-80}
       - CONNECTOR_UPDATE_EXISTING_DATA=true
       - CONNECTOR_LOG_LEVEL=error
-      - CONNECTOR_DURATION_PERIOD=PT4M
+      - CONNECTOR_DURATION_PERIOD=PT1H
       # API Settings
       - TI_API_URL=https://tap.group-ib.com/api/v2/
       - TI_API_USERNAME=${GROUP_IB_USERNAME}
