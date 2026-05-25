@@ -130,7 +130,7 @@ services:
       - APP__ADMIN__PASSWORD=${OPENCTI_ADMIN_PASSWORD}
       - APP__ADMIN__TOKEN=${OPENCTI_ADMIN_TOKEN}
       - APP__ENCRYPTION_KEY=${OPENCTI_ENCRYPTION_KEY}
-      - APP__INGESTION__CONCURRENCY=20
+      - APP__INGESTION__CONCURRENCY=10
       - APP__INGESTION__BATCH_SIZE=1000
       - REDIS__HOSTNAME=redis
       - REDIS__PORT=6379
@@ -178,7 +178,7 @@ services:
         condition: service_healthy
     deploy:
       mode: replicated
-      replicas: 8
+      replicas: 6
     restart: always
 
   ###########################
