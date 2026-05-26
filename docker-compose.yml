@@ -41,6 +41,8 @@ services:
       - thread_pool.search.queue_size=5000
       - logger.org.elasticsearch.discovery="ERROR"
 #      - indices.store.throttle.type=merge
+      - "indices.memory.index_buffer_size=15%"
+      - "indices.memory.min_index_buffer_size=256mb"
       - "ES_JAVA_OPTS=-Xms${ELASTIC_MEMORY_SIZE} -Xmx${ELASTIC_MEMORY_SIZE} -Dnode.store.allow_mmap=false"
     restart: always
     ulimits:
@@ -134,8 +136,8 @@ services:
       - APP__ADMIN__PASSWORD=${OPENCTI_ADMIN_PASSWORD}
       - APP__ADMIN__TOKEN=${OPENCTI_ADMIN_TOKEN}
       - APP__ENCRYPTION_KEY=${OPENCTI_ENCRYPTION_KEY}
-      - APP__INGESTION__CONCURRENCY=8
-      - APP__INGESTION__BATCH_SIZE=1500
+      - APP__INGESTION__CONCURRENCY=4
+      - APP__INGESTION__BATCH_SIZE=500
       - REDIS__HOSTNAME=redis
       - REDIS__PORT=6379
       - ELASTICSEARCH__URL=http://elasticsearch:9200
@@ -182,7 +184,7 @@ services:
         condition: service_healthy
     deploy:
       mode: replicated
-      replicas: 6
+      replicas: 4
     restart: always
 
   ###########################
@@ -447,7 +449,7 @@ services:
       - CONNECTOR_CONFIDENCE_LEVEL=${CONNECTOR_GROUP_IB_CONFIDENCE_LEVEL:-80}
       - CONNECTOR_UPDATE_EXISTING_DATA=true
       - CONNECTOR_LOG_LEVEL=error
-      - CONNECTOR_DURATION_PERIOD=PT1H
+      - CONNECTOR_DURATION_PERIOD=PT12H
       # API Settings
       - TI_API_URL=https://tap.group-ib.com/api/v2/
       - TI_API_USERNAME=${GROUP_IB_USERNAME}
@@ -468,7 +470,7 @@ services:
       - TI_API_EXTRA_SETTINGS_IGNORE_NON_INDICATOR_THREATS=false
       - TI_API_EXTRA_SETTINGS_IGNORE_NON_MALWARE_DDOS=true
       - TI_API_EXTRA_SETTINGS_INTRUSION_SET_INSTEAD_OF_THREAT_ACTOR=false
-      - TI_API_EXTRA_SETTINGS_SCHEDULE_TIME=00:00
+      - TI_API_EXTRA_SETTINGS_SCHEDULE_TIME=04:00
       - TI_API_EXTRA_SETTINGS_TIME_OUTPUT_FORMAT=%Y-%m-%d %H:%M:%S
       - TI_API_EXTRA_SETTINGS_ENABLE_STATEMENT_MARKING=false
       # Collection APT Threats
