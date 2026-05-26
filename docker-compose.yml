@@ -394,6 +394,9 @@ services:
       - CONNECTOR_AUTO=false # Optional (default: false)
       - FIRST_EPSS_API_BASE_URL=https://api.first.org/data/v1/epss # Optional (default: 'https://api.first.org/data/v1/epss')
       - FIRST_EPSS_MAX_TLP=TLP:AMBER # Optional (default: 'TLP:AMBER')
+    deploy:
+      mode: replicated
+      replicas: 4
     restart: always
 
   connector-crowdsec:
