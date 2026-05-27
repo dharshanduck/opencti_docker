@@ -669,20 +669,20 @@ services:
       - PROMPTINTEL_IMPORT_LIMIT=1000
     restart: always
 
- connector-vxvault:
-   image: opencti/connector-vxvault:latest
-   environment:
-     - OPENCTI_URL=http://opencti:8080
-     - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
-     - CONNECTOR_ID=${CONNECTOR_VXVAULT_ID}
-     - CONNECTOR_NAME=VX Vault URL list
-     - CONNECTOR_SCOPE=vxvault
-     - CONNECTOR_LOG_LEVEL=info
-     - CONNECTOR_DURATION_PERIOD=P3D
-     - VXVAULT_URL=https://vxvault.net/URL_List.php
-     - VXVAULT_CREATE_INDICATORS=true
-     - VXVAULT_SSL_VERIFY=false
-   restart: always
+  connector-vxvault:
+    image: opencti/connector-vxvault:latest
+    environment:
+      - OPENCTI_URL=http://opencti:8080
+      - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
+      - CONNECTOR_ID=${CONNECTOR_VXVAULT_ID}
+      - CONNECTOR_NAME=VX Vault URL list
+      - CONNECTOR_SCOPE=vxvault
+      - CONNECTOR_LOG_LEVEL=info
+      - CONNECTOR_DURATION_PERIOD=P3D
+      - VXVAULT_URL=https://vxvault.net/URL_List.php
+      - VXVAULT_CREATE_INDICATORS=true
+      - VXVAULT_SSL_VERIFY=false
+    restart: always
 
 volumes:
   esdata:
