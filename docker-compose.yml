@@ -431,6 +431,24 @@ services:
     depends_on:
       opencti:
         condition: service_healthy
+        
+  connector-shodan:
+    image: opencti/connector-shodan:latest
+    environment:
+      - OPENCTI_URL=http://opencti:8080
+      - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
+      - CONNECTOR_ID=${CONNECTOR_SHODAN_ID} # Optional (default: '82b58916-a654-4cd4-81de-700eb72a5c94')
+      - CONNECTOR_NAME=Shodan # Optional (default: 'Shodan')
+      - CONNECTOR_SCOPE=ipv4-addr,indicator # Optional (default: ['ipv4-addr', 'indicator'])
+      - CONNECTOR_AUTO=false # Optional (default: false)
+      - CONNECTOR_LOG_LEVEL=error # Optional (default: error)
+      - SHODAN_TOKEN=${SHODAN_API_KEY}
+      #- SHODAN_MAX_TLP=TLP:AMBER # Optional (default: 'TLP:AMBER')
+      #- SHODAN_DEFAULT_SCORE=50 # Optional (default: 50)
+      #- SHODAN_IMPORT_SEARCH_RESULTS=true # Optional (default: true)
+      #- SHODAN_CREATE_NOTE=true # Optional (default: true)
+      - SHODAN_USE_ISP_NAME_FOR_ASN=true # Optional (default: false)
+    restart: always 
 
 
   ###########################
@@ -615,23 +633,56 @@ services:
       - CISA_TLP=TLP:CLEAR
     restart: always
 
-  connector-shodan:
-    image: opencti/connector-shodan:latest
+  connector-malwarebazaar:
+   image: opencti/connector-malwarebazaar:latest
     environment:
       - OPENCTI_URL=http://opencti:8080
       - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
-      - CONNECTOR_ID=${CONNECTOR_SHODAN_ID} # Optional (default: '82b58916-a654-4cd4-81de-700eb72a5c94')
-      - CONNECTOR_NAME=Shodan # Optional (default: 'Shodan')
-      - CONNECTOR_SCOPE=ipv4-addr,indicator # Optional (default: ['ipv4-addr', 'indicator'])
-      - CONNECTOR_AUTO=false # Optional (default: false)
-      - CONNECTOR_LOG_LEVEL=error # Optional (default: error)
-      - SHODAN_TOKEN=${SHODAN_API_KEY}
-      #- SHODAN_MAX_TLP=TLP:AMBER # Optional (default: 'TLP:AMBER')
-      #- SHODAN_DEFAULT_SCORE=50 # Optional (default: 50)
-      #- SHODAN_IMPORT_SEARCH_RESULTS=true # Optional (default: true)
-      #- SHODAN_CREATE_NOTE=true # Optional (default: true)
-      - SHODAN_USE_ISP_NAME_FOR_ASN=true # Optional (default: false)
-    restart: always  
+      - CONNECTOR_ID=${CONNECTOR_MALWAREBAZAAR_ID}
+      - CONNECTOR_NAME=MalwareBazaar
+      - CONNECTOR_SCOPE=StixFile
+      - CONNECTOR_LOG_LEVEL=debug
+      - CONNECTOR_DURATION_PERIOD=PT24h
+      - MALWAREBAZAAR_API_BASE_URL=https://mb-api.abuse.ch/api/v1/
+      - MALWAREBAZAAR_API_KEY=${MALWAREBAZAAR_API_KEY}
+      - MALWAREBAZAAR_TLP_LEVEL=clear
+      - MALWAREBAZAAR_X_OPENCTI_SCORE=100
+      - MALWAREBAZAAR_INCLUDE_TAGS=exe,dll,docm,docx,doc,xls,xlsx,xlsm,js
+      - MALWAREBAZAAR_INCLUDE_REPORTERS=false
+      - MALWAREBAZAAR_LABELS=malware-bazaar
+    restart: always
+
+  connector-promptintel:
+    image: opencti/connector-promptintel:latest
+    environment:
+      - OPENCTI_URL=http://opencti:8080
+      - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
+      - CONNECTOR_ID=${CONNECTOR_PROMPTINTEL_ID}
+      - CONNECTOR_NAME=PromptIntel
+      - CONNECTOR_SCOPE=promptintel
+      - CONNECTOR_LOG_LEVEL=info
+      - CONNECTOR_DURATION_PERIOD=PT6H
+      - PROMPTINTEL_API_URL=https://api.promptintel.novahunting.ai/api/v1
+      - PROMPTINTEL_API_KEY=${PROMPTINTEL_API_KEY}
+      - PROMPTINTEL_TLP_LEVEL=clear
+      - PROMPTINTEL_IMPORT_START_LIMIT=8000
+      - PROMPTINTEL_IMPORT_LIMIT=1000
+    restart: always
+
+ connector-vxvault:
+   image: opencti/connector-vxvault:latest
+   environment:
+     - OPENCTI_URL=http://opencti:8080
+     - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
+     - CONNECTOR_ID=${CONNECTOR_VXVAULT_ID}
+     - CONNECTOR_NAME=VX Vault URL list
+     - CONNECTOR_SCOPE=vxvault
+     - CONNECTOR_LOG_LEVEL=info
+     - CONNECTOR_DURATION_PERIOD=P3D
+     - VXVAULT_URL=https://vxvault.net/URL_List.php
+     - VXVAULT_CREATE_INDICATORS=true
+     - VXVAULT_SSL_VERIFY=false
+   restart: always
 
 volumes:
   esdata:
