@@ -634,7 +634,7 @@ services:
     restart: always
 
   connector-malwarebazaar:
-   image: opencti/connector-malwarebazaar:latest
+    image: opencti/connector-malwarebazaar:latest
     environment:
       - OPENCTI_URL=http://opencti:8080
       - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
