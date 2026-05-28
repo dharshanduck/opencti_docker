@@ -226,6 +226,7 @@ services:
       - CONNECTOR_TYPE=INTERNAL_EXPORT_FILE
       - CONNECTOR_NAME=ExportFileTxt
       - CONNECTOR_SCOPE=text/plain
+      - CONNECTOR_LOG_LEVEL=debug
     restart: always
     depends_on:
       opencti:
